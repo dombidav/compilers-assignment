@@ -1,0 +1,10 @@
+{
+  "name": "compilers-assignment",
+  "version": "0.0.2",
+  "main": "main.js",
+  "private": true,
+  "dependencies": {
+    "@electron/remote": "2.0.1",
+    "electron": "^16.0.0"
+  }
+}
