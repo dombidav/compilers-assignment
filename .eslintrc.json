@@ -75,11 +75,15 @@
         "no-unexpected-multiline": "error",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": [
-          "error"
+          "error",
+          {
+            "varsIgnorePattern": "__",
+            "argsIgnorePattern": "__"
+          }
         ],
         "no-undef": "off",
         "@angular-eslint/directive-selector": [
-          "error",
+          "off",
           {
             "type": "attribute",
             "prefix": "app",

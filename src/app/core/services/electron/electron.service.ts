@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
-import { ipcRenderer, webFrame, dialog } from 'electron';
-import * as childProcess from 'child_process';
-import * as fs from 'fs';
-import * as path from 'path';
+import { ipcRenderer, webFrame, dialog } from 'electron'
+import * as childProcess from 'child_process'
+import * as fs from 'fs'
+import * as path from 'path'
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +21,12 @@ export class ElectronService {
   constructor() {
     // Conditional imports
     if (this.isElectron) {
-      this.ipcRenderer = window.require('electron').ipcRenderer;
-      this.webFrame = window.require('electron').webFrame;
+      this.ipcRenderer = window.require('electron').ipcRenderer
+      this.webFrame = window.require('electron').webFrame
 
-      this.childProcess = window.require('child_process');
-      this.fs = window.require('fs');
-      this.path = window.require('path');
+      this.childProcess = window.require('child_process')
+      this.fs = window.require('fs')
+      this.path = window.require('path')
 
       // Notes :
       // * A NodeJS's dependency imported with 'window.require' MUST BE present in `dependencies` of both `app/package.json`
@@ -43,10 +43,10 @@ export class ElectronService {
   }
 
   get isElectron(): boolean {
-    return !!(window && window.process && window.process.type);
+    return !!(window && window.process && window.process.type)
   }
 
   showOpenDialog() {
-    return this.ipcRenderer.invoke('open-file') as Promise<string[]>;
+    return this.ipcRenderer.invoke('open-file') as Promise<string[]>
   }
 }
