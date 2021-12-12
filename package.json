@@ -59,6 +59,9 @@
     "primeng": "^13.0.1",
     "rxjs": "^7.4.0",
     "tslib": "^2.1.0",
+    "electron": "^16.0.0",
+    "electron-builder": "^22.13.1",
+    "electron-reload": "^1.5.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -78,11 +81,8 @@
     "@types/jasminewd2": "^2.0.10",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "electron": "^16.0.0",
     "@typescript-eslint/parser": "^5.4.0",
     "conventional-changelog-cli": "^2.1.1",
-    "electron-builder": "^22.13.1",
-    "electron-reload": "^1.5.0",
     "eslint": "^8.2.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsdoc": "^37.0.3",
