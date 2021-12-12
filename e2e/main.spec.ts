@@ -27,11 +27,11 @@ test.describe('Check Home Page', async () => {
       })
 
       return new Promise((resolve) => {
-        if (mainWindow.isVisible()) 
+        if (mainWindow.isVisible())
           resolve(getState())
-         else 
+         else
           mainWindow.once('ready-to-show', () => setTimeout(() => resolve(getState()), 0))
-        
+
       })
     })
 
@@ -47,9 +47,9 @@ test.describe('Check Home Page', async () => {
   // });
 
   test('Check title', async () => {
-    const elem = await firstWindow.$('app-home h1')
+    const elem = await firstWindow.$('h2')
     const text = await elem.innerText()
-    expect(text).toBe('App works !')
+    expect(text).toBeTruthy()
   })
 
   test.afterAll( async () => {
