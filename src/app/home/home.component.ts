@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
-import { ElectronService } from '../core/services'
+import {Component, OnInit} from '@angular/core'
+import {Router} from '@angular/router'
+import {ElectronService} from '../core/services'
+import {CompilerService} from '../services/compiler.service'
 
 @Component({
   selector: 'app-home',
@@ -12,12 +13,29 @@ export class HomeComponent implements OnInit {
   convertedInput = ''
   pathInput = ''
   solutionSteps: string[] = []
-  solverMatrix: string[][] = []
+  solverMatrix: string[][] = [
+    [ '', '+', '*', '(', ')', 'i', '#' ],
+    [ 'E', '', '', "(TE', 1)", '', "(TE', 1)", '' ],
+    [ "E'", "(+TE', 2)", '', '', '(e, 3)', '', '(e, 3)' ],
+    [ 'T', '', '', "(FT', 4)", '', "(FT', 4)", '' ],
+    [ "T'", '(e, 6)', "(*FT', 5)", '', '(e, 6)', '', '(e, 6)' ],
+    [ 'F', '', '', '((E), 7)', '', '(i, 8)', '' ],
+    // --------------------------------------------------
+    [ '+', 'POP', '', '', '', '', '' ],
+    [ '*', '', 'POP', '', '', '', '' ],
+    [ '(', '', '', 'POP', '', '', '' ],
+    [ ')', '', '', '', 'POP', '', '' ],
+    [ 'i', '', '', '', '', 'POP', '' ],
+    // --------------------------------------------------
+    [ '#', '', '', '', '', '', 'ACCEPT' ],
+  ]
   uploadedFile: any
+  headerMessage = 'Default solver table loaded';
 
   constructor(
     private readonly router: Router,
-    private readonly electronService: ElectronService
+    private readonly electronService: ElectronService,
+    public readonly compiler: CompilerService
   ) { }
 
   ngOnInit() {
@@ -25,30 +43,33 @@ export class HomeComponent implements OnInit {
     console.log('Electron fs', this.electronService.fs)
   }
 
-  onOriginalOk() {
-    console.log('Original input:', this.originalInput)
-  }
-
-  onConvertedOk() {
-    console.log('Converted input:', this.convertedInput)
-  }
-
   onBrowse() {
-    console.log('Browse')
     this.electronService.showOpenDialog().then(result => {
-      console.log('Result:', result)
       if (result.length > 0) {
         this.pathInput = result[0]
-        this.uploadedFile = this.electronService.fs.readFileSync(this.pathInput)
-        this.solutionSteps = this.uploadedFile.toString().split('\n')
-        this.solverMatrix = this.solutionSteps.map(row => row.split(' '))
-        console.log('Solver matrix:', this.solverMatrix)
+        this.uploadedFile = this.electronService.fs.readFileSync(this.pathInput).toString()
+        this.solverMatrix = []
+        for (const line of this.uploadedFile.split('\n'))
+          this.solverMatrix.push(line.split(';'))
+        this.headerMessage = `Custom solver table loaded`
+        this.onSolve()
+      } else {
+        alert('Nothing loaded')
       }
+    }).catch(() => {
+      alert('Wrong format for solver table')
     })
   }
 
   onSolve() {
-    console.log('Solve')
+    this.compiler.init(this.convertedInput, this.solverMatrix)
+    try {
+      this.compiler.solve()
+    } catch (e) {
+      this.solutionSteps.push(e.toString())
+    }
+    while (this.solutionSteps.length > 0) this.solutionSteps.pop()
+    this.compiler.solution.forEach(step => this.solutionSteps.push(`${step.cell} --> (${step.remainingInput}, ${step.stack}, ${step.appliedRules})`))
   }
 
   onUpload($event: any) {
@@ -59,5 +80,18 @@ export class HomeComponent implements OnInit {
   uploadHandler($event: any) {
     console.log('Upload Handler:', $event)
     this.uploadedFile = $event
+  }
+
+  originalInputKeyUp() {
+    this.convertedInput = this.originalInput.replace(/[0-9]+/g, 'i')
+    this.onSolve()
+  }
+
+  convertedInputKeyUp() {
+    this.originalInput = this.convertedInput
+    while (this.originalInput.includes('i')) {
+      this.originalInput = this.originalInput.replace('i', Math.floor(Math.random() * 10).toString())
+    }
+    this.onSolve()
   }
 }

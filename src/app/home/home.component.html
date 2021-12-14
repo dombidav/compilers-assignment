@@ -2,7 +2,7 @@
     <div class="container">
       <p-card [ngStyle]="{minWidth: '80%'}">
         <ng-template pTemplate="header">
-          <h2>Something here...</h2>
+          <h2></h2>
         </ng-template>
 
         <ng-template pTemplate="content">
@@ -16,24 +16,18 @@
                     <span class="p-float-label">
                         <input pInputText type="text"
                                id="original-input"
-                              [(ngModel)]="originalInput">
+                              [(ngModel)]="originalInput" (keyup)="originalInputKeyUp()">
                         <label for="original-input">Input Text</label>
                     </span>
-                  </div>
-                  <div class="p-1 px-4">
-                    <p-button label="Ok" class="display-inline" icon="pi pi-check" (click)="onOriginalOk()"></p-button>
                   </div>
                   <!-- section converted input -->
                   <div class="p-field p-md-4">
                     <span class="p-float-label">
                         <input pInputText type="text"
                                id="converted-input"
-                               [(ngModel)]="convertedInput">
+                               [(ngModel)]="convertedInput" (keyup)="convertedInputKeyUp()">
                         <label for="converted-input">Converted Input</label>
                     </span>
-                  </div>
-                  <div class="p-1 px-4">
-                    <p-button label="Ok" class="display-inline" icon="pi pi-check" (click)="onConvertedOk()"></p-button>
                   </div>
                   <!-- section path input -->
                   <div class="p-field p-md-4">
@@ -47,6 +41,9 @@
                   <div class="p-1 px-4">
                     <p-button label="Browse" class="display-inline" icon="pi pi-check" (click)="onBrowse()"></p-button>
                   </div>
+                </div>
+                <div class="p-1">
+                  <h5>{{ headerMessage }}:</h5>
                 </div>
                 <!-- section matrix -->
                 <table #solutionMatrix class="solution-matrix">
@@ -62,16 +59,15 @@
             </div>
             <div class="col-12 col-lg-4">
               <!-- section solution steps -->
-              <div>
-                <p-button label="Solve problem" icon="pi pi-check" (click)="onSolve()"></p-button>
-              </div>
-              <div>
+              <div class="solution-container">
                 <h3 *ngIf="solutionSteps.length > 0">Solution steps:</h3>
-                <ol>
-                  <li *ngFor="let step of solutionSteps">
-                    <p>{{step}}</p>
-                  </li>
-                </ol>
+                <div class="solution-matrix">
+                  <ol>
+                    <li *ngFor="let step of solutionSteps">
+                      <p>{{step}}</p>
+                    </li>
+                  </ol>
+                </div>
               </div>
             </div>
           </div>

@@ -2,5 +2,12 @@
 
 }
 
+.solution-container {
+  height: 90vh;
+  overflow: hidden;
+}
+
 .solution-matrix {
+  height: 90%;
+  overflow-y: auto;
 }
